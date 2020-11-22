@@ -258,6 +258,24 @@ function exportSVG(domId){
   document.getElementById("d-svg-1-"+ domId).href = url;
 }
 
+function exportPDF(domID){
+  var svg = $('#'+domID).get(0);
+  // you should set the format dynamically, write [width, height] instead of 'a4'
+  var pdf = new jsPDF('p', 'pt', 'a2');
+  svgElementToPdf(svg, pdf, {
+    // scale: 72/96, // this is the ratio of px to pt units
+    scale: 96/96, // this is the ratio of px to pt units
+    removeInvalid: true // this removes elements that could not be translated to pdf from the source svg
+  });
+  var data = pdf.output('datauri'); // use output() to get the jsPDF buffer
+  document.getElementById("d-pdf-1-"+ domID).href = data;
+
+}
+
+function detectSizePaper(domId){
+  var svg = $('#'+domID).get(0);
+}
+
 $(document).ready(function(){
   $('#drawBox').on('submit', function(e){
     var d,r,c,e,f;
@@ -271,6 +289,9 @@ $(document).ready(function(){
     drawDagiacwithOffset(d, r, c, e, g, 10, 1, 'mm')
     exportSVG("demo1")
     exportSVG("demo2")
+    exportPDF("demo1")
+    exportPDF("demo2")
     return false;
   })
 })
+
